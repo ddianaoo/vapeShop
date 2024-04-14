@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-lg bg-light">
+    <a class="navbar-brand" href="{%  url 'home' %}">VapeShop</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+            {% if request.user.is_authenticated and request.user.is_staff %}
+            <li class="nav-item"><a class="nav-link">Користувачі</a></li>
+            <li class="nav-item"><a class="nav-link">Автори</a></li>
+
+            {% else %}
+            <li class="nav-item"><a class="nav-link" >Головна</a></li>
+            <li class="nav-item"><a class="nav-link" >Рідини</a></li>
+            <li class="nav-item"><a class="nav-link" >Одноразові сигарети</a></li>
+            <li class="nav-item"><a class="nav-link" >POD-системи</a></li>
+            <li class="nav-item"><a class="nav-link" >Комплектуючі</a></li>
+
+            {% if request.user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" >Замовлення</a></li>
+            {% endif %}
+            {% endif %}
+
+        </ul>
+
+
+        {% if request.user.is_authenticated %}
+        <span class="navbar-text" style="color:black;">
+            Ласкаво просимо, {{ request.user.email }} !
+            <a href="{% url 'signout' %}" style="color:white; background-color: black; border: black;" class="btn btn-primary">Вихід</a>
+            </span>
+        {% else %}
+        <span class="navbar-text">
+            <a href="{% url 'signin' %}" style="color:white; background-color: black; border: black;" class="btn btn-primary">Вхід</a>
+            <a href="{% url 'signup' %}" style="color:white; background-color: black; border: black;" class="btn btn-primary">Реєстрація</a>
+            </span>
+        {% endif %}
+
+    </div>
+</nav>

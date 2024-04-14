@@ -51,3 +51,13 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+    @staticmethod
+    def get_by_id(user_id):
+        custom_user = CustomUser.objects.get(id=user_id)
+        return custom_user or None
+
+    @staticmethod
+    def get_by_email(email):
+        custom_user = CustomUser.objects.get(email=email)
+        return custom_user or None
