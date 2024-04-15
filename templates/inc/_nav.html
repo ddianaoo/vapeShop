@@ -7,18 +7,53 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item"><a class="nav-link" href="{% url 'zhydkosti' %}">Рідини</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'odnorazki' %}">Одноразові сигарети</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'podsystems' %}">POD-системи</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'components' %}">Комплектуючі</a></li>
+
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                Рідини
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{% url 'category' 'zhydkosti-10ml-0mg' %}">Рідини 10мл / 0мг</a></li>
+                <li><a class="dropdown-item" href="{% url 'category' 'zhydkosti-10ml-10mg' %}">Рідини 10мл / 10мг</a></li>
+                <li><a class="dropdown-item" href="{% url 'category' 'zhydkosti-10ml-30mg' %}">Рідини 10мл / 30мг</a></li>
+                <li><a class="dropdown-item" href="{% url 'category' 'zhydkosti-10ml-50mg' %}">Рідини 10мл / 50мг</a></li>
+
+                <li><a class="dropdown-item" href="{% url 'category' 'zhydkosti-15ml-0mg' %}">Рідини 15мл / 0мг</a></li>
+                <li><a class="dropdown-item" href="{% url 'category' 'zhydkosti-15ml-10mg' %}">Рідини 15мл / 10мг</a></li>
+                <li><a class="dropdown-item" href="{% url 'category' 'zhydkosti-15ml-30mg' %}">Рідини 15мл / 30мг</a></li>
+                <li><a class="dropdown-item" href="{% url 'category' 'zhydkosti-15ml-50mg' %}">Рідини 15мл / 50мг</a></li>
+
+                <li><a class="dropdown-item" href="{% url 'category' 'zhydkosti-30ml-0mg' %}">Рідини 30мл / 0мг</a></li>
+                <li><a class="dropdown-item" href="{% url 'category' 'zhydkosti-30ml-10mg' %}">Рідини 30мл / 10мг</a></li>
+                <li><a class="dropdown-item" href="{% url 'category' 'zhydkosti-30ml-30mg' %}">Рідини 30мл / 30мг</a></li>
+                <li><a class="dropdown-item" href="{% url 'category' 'zhydkosti-30ml-50mg' %}">Рідини 30мл / 50мг</a></li>
+
+            </ul>
+            </li>
+
+            <li class="nav-item"><a class="nav-link" href="{% url 'category' 'odnorazki' %}">Одноразові сигарети</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'category' 'pod-systems' %}">POD-системи</a></li>
+
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                Комплектуючі
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{% url 'category' 'cartridges' %}">Картриджі</a></li>
+                <li><a class="dropdown-item" href="{% url 'category' 'sticks' %}">Стіки</a></li>
+            </ul>
+            </li>
 
             {% if request.user.is_authenticated %}
                 <li class="nav-item"><a class="nav-link">|</a></li>
                 <li class="nav-item"><a class="nav-link" style="color: #912D9B;">Замовлення</a></li>
 
                 {% if request.user.is_staff %}
+                    <li class="nav-item"><a class="nav-link" style="color: #912D9B;">Товар</a></li>
+                    <li class="nav-item"><a class="nav-link" style="color: #912D9B;">Категорії</a></li>
                     <li class="nav-item"><a class="nav-link" style="color: #912D9B;">Користувачі</a></li>
-                    <li class="nav-item"><a class="nav-link" style="color: #912D9B;">Автори</a></li>
                 {% endif %}
 
             {% endif %}

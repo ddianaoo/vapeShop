@@ -13,6 +13,7 @@ STATUS_CHOICES = (
 
 class Category(models.Model):
     title = models.CharField(max_length=100, null=False, unique=True, verbose_name='Назва')
+    slug = models.SlugField(max_length=255, verbose_name='Url', unique=True, null=False)
 
     class Meta:
         verbose_name = 'категорія'
@@ -21,6 +22,9 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('category', kwargs={'slug': self.slug})
 
 
 class Product(models.Model):
