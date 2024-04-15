@@ -1,5 +1,7 @@
 from django.db import models
 from accounts.models import CustomUser
+from django.urls import reverse
+
 
 STATUS_CHOICES = (
     (0, 'Створюється'),
@@ -37,6 +39,9 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+       return reverse('get_product', kwargs={"pk": self.pk})
 
 
 class Order(models.Model):

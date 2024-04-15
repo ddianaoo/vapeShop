@@ -7,21 +7,20 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-            {% if request.user.is_authenticated and request.user.is_staff %}
-            <li class="nav-item"><a class="nav-link">Користувачі</a></li>
-            <li class="nav-item"><a class="nav-link">Автори</a></li>
-
-            {% else %}
-            <li class="nav-item"><a class="nav-link" >Головна</a></li>
-            <li class="nav-item"><a class="nav-link" >Рідини</a></li>
-            <li class="nav-item"><a class="nav-link" >Одноразові сигарети</a></li>
-            <li class="nav-item"><a class="nav-link" >POD-системи</a></li>
-            <li class="nav-item"><a class="nav-link" >Комплектуючі</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'zhydkosti' %}">Рідини</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'odnorazki' %}">Одноразові сигарети</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'podsystems' %}">POD-системи</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'components' %}">Комплектуючі</a></li>
 
             {% if request.user.is_authenticated %}
-            <li class="nav-item"><a class="nav-link" >Замовлення</a></li>
-            {% endif %}
+                <li class="nav-item"><a class="nav-link">|</a></li>
+                <li class="nav-item"><a class="nav-link" style="color: #912D9B;">Замовлення</a></li>
+
+                {% if request.user.is_staff %}
+                    <li class="nav-item"><a class="nav-link" style="color: #912D9B;">Користувачі</a></li>
+                    <li class="nav-item"><a class="nav-link" style="color: #912D9B;">Автори</a></li>
+                {% endif %}
+
             {% endif %}
 
         </ul>

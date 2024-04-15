@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ news_item.title }} :: {{ block.super }}
+{% endblock %}
+
+{% block sidebar %}
+    {% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="media">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="" width="350" class="me-3 float-start">
+            {% else %}
+            <img src="https://picsum.photos/id/1060/350/300/?blur=2" alt="" class="me-3 float-start">
+            {% endif %}
+            <div class="media-body">
+                <h3 class="card-title">{{ product.title }}</h3>
+                <hr/>
+                <p class="card-text">{{ product.description|linebreaks }}</p>
+                <p class="card-text"><strong>Країна виробник:</strong> {{ product.production }}</p>
+                <p class="card-text"><strong>Ціна:</strong> {{ product.price }} грн</p>
+                <p class="card-text"><strong>Категорія:</strong> {{ product.category }}</p>
+                <p class="card-text"><strong>Кількість у наявності:</strong> {{ product.stock_quantity }} шт.</p>
+                <a href="#" style="color:white; background-color: black; border: black;" class="btn btn-primary">Додати в кошик</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
