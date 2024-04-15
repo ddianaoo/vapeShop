@@ -12,6 +12,11 @@ class ProductListView(ListView):
     def get_queryset(self):
         return Product.objects.filter(category__title__contains=self.category_filter)
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.category_filter
+        return context
+
 
 class ZhydkostiListView(ProductListView):
     category_filter = 'рідини'

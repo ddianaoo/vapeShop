@@ -10,23 +10,32 @@
 
 
 {% block content %}
-<div class="card mb-3">
-    <div class="card-body">
-        <div class="media">
-            {% if product.image %}
-            <img src="{{ product.image.url }}" alt="" width="350" class="me-3 float-start">
-            {% else %}
-            <img src="https://picsum.photos/id/1060/350/300/?blur=2" alt="" class="me-3 float-start">
-            {% endif %}
-            <div class="media-body">
-                <h3 class="card-title">{{ product.title }}</h3>
-                <hr/>
-                <p class="card-text">{{ product.description|linebreaks }}</p>
-                <p class="card-text"><strong>Країна виробник:</strong> {{ product.production }}</p>
-                <p class="card-text"><strong>Ціна:</strong> {{ product.price }} грн</p>
-                <p class="card-text"><strong>Категорія:</strong> {{ product.category }}</p>
-                <p class="card-text"><strong>Кількість у наявності:</strong> {{ product.stock_quantity }} шт.</p>
-                <a href="#" style="color:white; background-color: black; border: black;" class="btn btn-primary">Додати в кошик</a>
+<br/>
+<div class="container">
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-4">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.title }}" class="img-fluid">
+                {% else %}
+                <img src="https://picsum.photos/id/1060/350/300/?blur=2" alt="{{ product.title }}" class="img-fluid">
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.title }}</h5>
+                    <p class="card-text">{{ product.description|linebreaks }}</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Ціна:</strong> {{ product.price }} грн</li>
+                        <li class="list-group-item"><strong>Категорія:</strong> {{ product.category }}</li>
+                        <li class="list-group-item"><strong>Країна виробник:</strong> {{ product.production }}</li>
+                        <li class="list-group-item"><strong>Кількість у наявності:</strong> {{ product.stock_quantity }} шт.</li>
+                        <li class="list-group-item"></li>
+                    </ul>
+
+                    <a href="#" style="color:white; background-color: black; border: black; margin: 10px 15px"
+                       class="btn btn-primary">Додати в кошик</a>
+                </div>
             </div>
         </div>
     </div>

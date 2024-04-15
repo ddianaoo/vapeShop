@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}
+Авторизація :: {{ block.super }}
+{% endblock %}
 
 {% block content %}
-<h2>Авторизація</h2>
+<h2 class="text-center mb-4 mt-5">Авторизація</h2>
 <br>
 
 <form method="POST"  action="">
