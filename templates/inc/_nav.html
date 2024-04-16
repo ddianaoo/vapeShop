@@ -50,18 +50,31 @@
                 <li class="nav-item"><a class="nav-link">|</a></li>
 
                 {% if request.user.is_staff %}
+
+
                 <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button"
                    data-bs-toggle="dropdown" aria-expanded="false" style="color: #912D9B;">
-                    Дії
+                    Категорії
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="{% url 'create_category' %}">Додати категорію</a></li>
-                    <li><a class="dropdown-item">Додати товар</a></li>
-                    <li><a class="dropdown-item">Додати помічника</a></li>
+                    <li><a class="dropdown-item" href="{% url 'category_list' %}">Список категорій</a></li>
                 </ul>
                 </li>
-                    <li class="nav-item"><a class="nav-link" style="color: #912D9B;">Замовлення</a></li>
+
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false" style="color: #912D9B;">
+                    Користувачі
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{% url 'create_category' %}">Додати помічника</a></li>
+                    <li><a class="dropdown-item">Список користувачів</a></li>
+                </ul>
+                </li>
+
+                <li class="nav-item"><a class="nav-link" style="color: #912D9B;">Замовлення</a></li>
 
                 {% else %}
                 <li class="nav-item">

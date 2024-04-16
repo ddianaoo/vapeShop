@@ -105,3 +105,18 @@ def create_category(request):
     else:
         form = CreateCategoryForm()
     return render(request, 'for_staff/create_category.html', {'form': form})
+
+
+class ListCategories(ListView):
+    context_object_name = 'categories'
+    paginate_by = 8
+    template_name = 'for_staff/category_list.html'
+
+    def get_queryset(self):
+        return Category.objects.all()
+
+
+def delete_category(request, pk):
+    category = get_object_or_404(Category, id=pk)
+    category.delete()
+    return redirect('category_list')
