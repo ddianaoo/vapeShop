@@ -15,8 +15,9 @@
 
     {% for order, order_details in order_pars.items %}
     <div class="card mb-4">
-        <div class="card-header text-white" style="background-color: #912D9B;">
-            Статус: {{ order.status|display_status:STATUS_CHOICES }}
+        <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #912D9B;">
+            <div>Статус: {{ order.status|display_status:STATUS_CHOICES }}</div>
+            <div>Замовлено: {{ order.created_at|date:"d.m.Y" }}</div>
         </div>
 
         {% for detail in order_details %}
@@ -40,8 +41,8 @@
             </div>
         </div>
         {% endfor %}
-        <div class="card-footer text-muted">
-            Замовлено: {{ order.created_at|date:"d.m.Y" }}
+        <div class="card-footer">
+            <strong>Загалом:</strong> {{ order_details|calculate_order_total }} грн
         </div>
     </div>
     {% endfor %}

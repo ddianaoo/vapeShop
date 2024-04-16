@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category, Order, OrderDetail, STATUS_CHOICES
 from django.views.generic import View, ListView, DetailView
 from django.contrib import messages
+from vapeshop.decorators import custom_login_required
+from .forms import CreateCategoryForm
 
 
 class ListProducts(ListView):
@@ -25,6 +27,7 @@ class GetProducts(DetailView):
 
 
 #Orders
+@custom_login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     order, created = Order.objects.get_or_create(user=request.user, status=0)
@@ -33,12 +36,14 @@ def add_to_cart(request, product_id):
     return redirect("cart")
 
 
+@custom_login_required
 def get_cart(request):
     order, created = Order.objects.get_or_create(user=request.user, status=0)
     order_details = OrderDetail.objects.filter(order=order)
     return render(request, "orders/cart.html", {'order': order, 'cart_items': order_details})
 
 
+@custom_login_required
 def decrease_quantity(request, item_id):
     item = get_object_or_404(OrderDetail, id=item_id)
     item.quantity -= 1
@@ -49,6 +54,7 @@ def decrease_quantity(request, item_id):
     return redirect('cart')
 
 
+@custom_login_required
 def increase_quantity(request, item_id):
     item = get_object_or_404(OrderDetail, id=item_id)
     print(item.product.stock_quantity)
@@ -60,12 +66,14 @@ def increase_quantity(request, item_id):
     return redirect('cart')
 
 
+@custom_login_required
 def delete_item(request, item_id):
     item = get_object_or_404(OrderDetail, id=item_id)
     item.delete()
     return redirect('cart')
 
 
+@custom_login_required
 def create_order(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     order.status = 1
@@ -74,6 +82,7 @@ def create_order(request, order_id):
     return redirect('home')
 
 
+@custom_login_required
 def get_my_orders(request):
     orders = Order.objects.filter(user=request.user).exclude(status=0)
     order_pars = dict()
@@ -81,3 +90,18 @@ def get_my_orders(request):
         order_details = OrderDetail.objects.filter(order=order)
         order_pars[order] = order_details
     return render(request, "orders/orders_history.html", {'order_pars': order_pars, 'STATUS_CHOICES': STATUS_CHOICES })
+
+
+#for staff
+def create_category(request):
+    if request.method == 'POST':
+        form = CreateCategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Успішно додано нову категорію!')
+            return redirect('home')
+        else:
+            messages.error(request, form.errors)
+    else:
+        form = CreateCategoryForm()
+    return render(request, 'for_staff/create_category.html', {'form': form})

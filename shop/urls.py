@@ -12,4 +12,6 @@ urlpatterns = [
     path('delete/<int:item_id>/', delete_item, name='delete_item'),
     path('create-order/<int:order_id>/', create_order, name='create_order'),
     path('get-my-orders/', get_my_orders, name='get_my_orders'),
+
+    path('create-category/', create_category, name='create_category')
 ]
