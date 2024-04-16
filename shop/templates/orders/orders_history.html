@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load order_labels %}
+
+{% block title %}
+Історія замовлень :: {{ block.super }}
+{% endblock %}
+
+{% block sidebar %}
+    {% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container mt-4">
+
+    {% for order, order_details in order_pars.items %}
+    <div class="card mb-4">
+        <div class="card-header text-white" style="background-color: #912D9B;">
+            Статус: {{ order.status|display_status:STATUS_CHOICES }}
+        </div>
+
+        {% for detail in order_details %}
+        <div class="row g-0">
+            <div class="col-md-4">
+                {% if detail.product.image %}
+                <img src="{{ detail.product.image.url }}" width="200" alt="{{ detail.product.title }}" class="img-fluid">
+                {% else %}
+                <img src="https://picsum.photos/id/1060/350/200/?blur=2" alt="{{ detail.product.title }}" class="img-fluid">
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{ detail.product.title }}</h5>
+                    <p class="card-text">{{ detail.product.category }}</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Кількість:</strong> {{ detail.quantity }} шт.</li>
+                        <li class="list-group-item"><strong>Ціна:</strong> {{ detail.product.price }} грн</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="card-footer text-muted">
+            Замовлено: {{ order.created_at|date:"d.m.Y" }}
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}
