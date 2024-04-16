@@ -3,10 +3,11 @@ from .views import *
 
 
 urlpatterns = [
-    # path('zhydkosti/', ZhydkostiListView.as_view(), name='zhydkosti'),
-    # path('podsystems/', PodsystemsListView.as_view(), name='podsystems'),
-    # path('odnorazki/', OdnorazkiListView.as_view(), name='odnorazki'),
-    # path('components/', ComponentsListView.as_view(), name='components'),
     path('product/<int:pk>/', GetProducts.as_view(), name='get_product'),
     path('products/<str:slug>/', ListProducts.as_view(), name='category'),
+    path('add_to_cart/<int:product_id>/', add_to_cart, name='add_to_cart'),
+    path('my-cart/', get_cart, name='cart'),
+    path('decrease-quantity/<int:item_id>/', decrease_quantity, name='decrease_quantity'),
+    path('increase-quantity/<int:item_id>/', increase_quantity, name='increase_quantity'),
+    path('delete/<int:item_id>/', delete_item, name='delete_item'),
 ]
