@@ -12,3 +12,11 @@ def custom_login_required(view_func):
             return view_func(request, *args, **kwargs)
         return redirect(reverse('signin'))
     return wrapper
+
+
+def staff_login_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.is_staff:
+            return view_func(request, *args, **kwargs)
+        return redirect(reverse('home'))
+    return wrapper

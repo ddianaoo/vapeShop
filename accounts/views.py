@@ -4,6 +4,8 @@ from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.views.generic import View, ListView, DetailView
 from .models import CustomUser
+from vapeshop.decorators import custom_login_required, staff_login_required
+from django.utils.decorators import method_decorator
 
 
 def signup(request):
@@ -51,6 +53,7 @@ def signout(request):
     return redirect('home')
 
 
+@method_decorator(staff_login_required, name='dispatch')
 class ListUsers(ListView):
     context_object_name = 'users'
     paginate_by = 6
@@ -58,6 +61,7 @@ class ListUsers(ListView):
     template_name = 'accounts/user_list.html'
 
 
+@staff_login_required
 def add_assistant(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)

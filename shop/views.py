@@ -2,8 +2,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category, Order, OrderDetail, STATUS_CHOICES
 from django.views.generic import View, ListView, DetailView
 from django.contrib import messages
-from vapeshop.decorators import custom_login_required
+from vapeshop.decorators import custom_login_required, staff_login_required
 from .forms import CreateCategoryForm, CreateProductForm, EditProductForm
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 class ListProducts(ListView):
@@ -81,6 +83,7 @@ def create_order(request, order_id):
     return redirect('home')
 
 
+@login_required
 def get_orders_history(request, user_pk):
     if request.user.pk == user_pk or request.user.is_staff:
         orders = Order.objects.filter(user__pk=user_pk).exclude(status=0)
@@ -95,6 +98,7 @@ def get_orders_history(request, user_pk):
 
 
 #for staff
+@staff_login_required
 def create_category(request):
     if request.method == 'POST':
         form = CreateCategoryForm(request.POST)
@@ -109,6 +113,7 @@ def create_category(request):
     return render(request, 'for_staff/create_category.html', {'form': form})
 
 
+@method_decorator(staff_login_required, name='dispatch')
 class ListCategories(ListView):
     context_object_name = 'categories'
     paginate_by = 6
@@ -116,12 +121,14 @@ class ListCategories(ListView):
     template_name = 'for_staff/category_list.html'
 
 
+@staff_login_required
 def delete_category(request, pk):
     category = get_object_or_404(Category, id=pk)
     category.delete()
     return redirect('category_list')
 
 
+@staff_login_required
 def edit_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
     if request.method == 'POST':
@@ -136,6 +143,7 @@ def edit_category(request, pk):
                   {'form': form, 'title': 'Редагування категорії'})
 
 
+@staff_login_required
 def create_product(request):
     if request.method == 'POST':
         form = CreateProductForm(request.POST, request.FILES)
@@ -151,6 +159,7 @@ def create_product(request):
     return render(request, 'for_staff/create_product.html', {'form': form})
 
 
+@staff_login_required
 def delete_product(request, pk):
     product = get_object_or_404(Product, id=pk)
     product.delete()
@@ -158,6 +167,7 @@ def delete_product(request, pk):
     return redirect('home')
 
 
+@staff_login_required
 def edit_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
