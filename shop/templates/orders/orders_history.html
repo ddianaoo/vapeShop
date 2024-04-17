@@ -22,7 +22,7 @@
 
         {% for detail in order_details %}
         <div class="row g-0">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 {% if detail.product.image %}
                 <img src="{{ detail.product.image.url }}" width="200" alt="{{ detail.product.title }}" class="img-fluid">
                 {% else %}
@@ -31,7 +31,11 @@
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title">{{ detail.product.title }}</h5>
+                    <a href="{{ detail.product.get_absolute_url }}" class="text-decoration-none text-dark">
+                    <h5 class="card-title">
+                        {{ detail.product.title }}
+                    </h5>
+                    </a>
                     <p class="card-text">{{ detail.product.category }}</p>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"><strong>Кількість:</strong> {{ detail.quantity }} шт.</li>

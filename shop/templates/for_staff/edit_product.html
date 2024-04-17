@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Редагування товару :: {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<h2 class="text-center mb-4 mt-5">Редагування товару</h2>
+<br>
+
+<form method="POST" enctype="multipart/form-data" style="margin: 0 30px">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" style="color:white; background-color: black; border: black;" class="btn btn-primary">
+        Зберегти
+    </button>
+</form>
+{% endblock %}

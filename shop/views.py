@@ -3,7 +3,7 @@ from .models import Product, Category, Order, OrderDetail, STATUS_CHOICES
 from django.views.generic import View, ListView, DetailView
 from django.contrib import messages
 from vapeshop.decorators import custom_login_required
-from .forms import CreateCategoryForm
+from .forms import CreateCategoryForm, CreateProductForm, EditProductForm
 
 
 class ListProducts(ListView):
@@ -57,7 +57,6 @@ def decrease_quantity(request, item_id):
 @custom_login_required
 def increase_quantity(request, item_id):
     item = get_object_or_404(OrderDetail, id=item_id)
-    print(item.product.stock_quantity)
     if item.quantity < item.product.stock_quantity:
         item.quantity += 1
     else:
@@ -109,7 +108,7 @@ def create_category(request):
 
 class ListCategories(ListView):
     context_object_name = 'categories'
-    paginate_by = 8
+    paginate_by = 6
     template_name = 'for_staff/category_list.html'
 
     def get_queryset(self):
@@ -120,3 +119,38 @@ def delete_category(request, pk):
     category = get_object_or_404(Category, id=pk)
     category.delete()
     return redirect('category_list')
+
+
+def create_product(request):
+    if request.method == 'POST':
+        form = CreateProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            print(form.cleaned_data)
+            form.save()
+            messages.success(request, 'Успішно додано новий товар!')
+            return redirect('home')
+        else:
+            messages.error(request, form.errors)
+    else:
+        form = CreateProductForm()
+    return render(request, 'for_staff/create_product.html', {'form': form})
+
+
+def delete_product(request, pk):
+    product = get_object_or_404(Product, id=pk)
+    product.delete()
+    messages.success(request, 'Товар успішно видалено!')
+    return redirect('home')
+
+
+def edit_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        form = EditProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Товар успішно відредаговано!')
+            return redirect('get_product', pk)
+    else:
+        form = EditProductForm(instance=product)
+    return render(request, 'for_staff/edit_product.html', {'form': form})

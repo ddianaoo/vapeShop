@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Створення нового товару :: {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<h2 class="text-center mb-4 mt-5">Створення нового товару</h2>
+<br>
+
+<form method="POST"  action="" style="margin: 0 30px" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" style="color:white; background-color: black; border: black;" class="btn btn-primary">
+        Створити
+    </button>
+</form>
+{% endblock %}
