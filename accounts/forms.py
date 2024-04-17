@@ -18,12 +18,6 @@ class UserRegisterForm(UserCreationForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'age': forms.NumberInput(attrs={'class': 'form-control', 'step': '1'})
         }
-        labels = {
-            'firstname': "Ім'я",
-            'lastname': "Прізвище",
-            'email': 'Електронна пошта',
-            'age': 'Вік'
-        }
 
 
 class UserLoginForm(forms.ModelForm):

@@ -11,11 +11,12 @@ urlpatterns = [
     path('increase-quantity-in-order/<int:item_id>/', increase_quantity, name='increase_quantity'),
     path('delete-item-in-order/<int:item_id>/', delete_item, name='delete_item'),
     path('create-order/<int:order_id>/', create_order, name='create_order'),
-    path('get-my-orders/', get_my_orders, name='get_my_orders'),
+    path('get-orders-history/<int:user_pk>/', get_orders_history, name='get_orders_history'),
 
     path('create-category/', create_category, name='create_category'),
     path('delete-category/<int:pk>/', delete_category, name='delete_category'),
     path('categories/', ListCategories.as_view(), name='category_list'),
+    path('edit-category/<int:pk>/', edit_category, name='edit_category'),
     path('create-product/', create_product, name='create_product'),
     path('delete-product/<int:pk>/', delete_product, name='delete_product'),
     path('edit-product/<int:pk>/', edit_product, name='edit_product'),

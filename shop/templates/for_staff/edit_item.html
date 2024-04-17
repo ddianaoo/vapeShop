@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Редагування товару :: {{ block.super }}
+{{ title }} :: {{ block.super }}
 {% endblock %}
 
 {% block content %}
-<h2 class="text-center mb-4 mt-5">Редагування товару</h2>
+<h2 class="text-center mb-4 mt-5">{{ title }}</h2>
 <br>
 
 <form method="POST" enctype="multipart/form-data" style="margin: 0 30px">

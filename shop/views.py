@@ -81,14 +81,17 @@ def create_order(request, order_id):
     return redirect('home')
 
 
-@custom_login_required
-def get_my_orders(request):
-    orders = Order.objects.filter(user=request.user).exclude(status=0)
-    order_pars = dict()
-    for order in orders:
-        order_details = OrderDetail.objects.filter(order=order)
-        order_pars[order] = order_details
-    return render(request, "orders/orders_history.html", {'order_pars': order_pars, 'STATUS_CHOICES': STATUS_CHOICES })
+def get_orders_history(request, user_pk):
+    if request.user.pk == user_pk or request.user.is_staff:
+        orders = Order.objects.filter(user__pk=user_pk).exclude(status=0)
+        order_pars = dict()
+        for order in orders:
+            order_details = OrderDetail.objects.filter(order=order)
+            order_pars[order] = order_details
+        return render(request, "orders/orders_history.html", {'order_pars': order_pars, 'STATUS_CHOICES': STATUS_CHOICES })
+    else:
+        messages.error(request, 'Ви не маєте такого права')
+        return redirect('home')
 
 
 #for staff
@@ -109,16 +112,28 @@ def create_category(request):
 class ListCategories(ListView):
     context_object_name = 'categories'
     paginate_by = 6
+    model = Category
     template_name = 'for_staff/category_list.html'
-
-    def get_queryset(self):
-        return Category.objects.all()
 
 
 def delete_category(request, pk):
     category = get_object_or_404(Category, id=pk)
     category.delete()
     return redirect('category_list')
+
+
+def edit_category(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    if request.method == 'POST':
+        form = CreateCategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Категорію успішно відредаговано!')
+            return redirect('category_list')
+    else:
+        form = CreateCategoryForm(instance=category)
+    return render(request, 'for_staff/edit_item.html',
+                  {'form': form, 'title': 'Редагування категорії'})
 
 
 def create_product(request):
@@ -153,4 +168,7 @@ def edit_product(request, pk):
             return redirect('get_product', pk)
     else:
         form = EditProductForm(instance=product)
-    return render(request, 'for_staff/edit_product.html', {'form': form})
+    return render(request, 'for_staff/edit_item.html',
+                  {'form': form, 'title': 'Редагування товару'})
+
+

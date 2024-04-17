@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .forms import UserLoginForm, UserRegisterForm
 from django.contrib.auth import login, logout
 from django.contrib import messages
+from django.views.generic import View, ListView, DetailView
+from .models import CustomUser
 
 
 def signup(request):
@@ -22,7 +24,7 @@ def signup(request):
             messages.error(request, form.errors)
     else:
         form = UserRegisterForm()
-    return render(request, 'accounts/signup.html', {'form': form})
+    return render(request, 'accounts/signup.html', {'form': form, 'title': 'Реєстрація'})
 
 
 def signin(request):
@@ -47,3 +49,26 @@ def signin(request):
 def signout(request):
     logout(request)
     return redirect('home')
+
+
+class ListUsers(ListView):
+    context_object_name = 'users'
+    paginate_by = 6
+    model = CustomUser
+    template_name = 'accounts/user_list.html'
+
+
+def add_assistant(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_staff = True
+            user.is_superuser = False
+            user.save()
+            messages.success(request, 'Ви додали помічника!')
+            return redirect('user_list')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'accounts/signup.html',
+                  {'form': form, 'title': 'Додати помічника'})

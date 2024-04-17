@@ -78,8 +78,8 @@
                     Користувачі
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="{% url 'create_category' %}">Додати помічника</a></li>
-                    <li><a class="dropdown-item">Список користувачів</a></li>
+                    <li><a class="dropdown-item" href="{% url 'add_assistant' %}">Додати помічника</a></li>
+                    <li><a class="dropdown-item" href="{% url 'user_list' %}">Список користувачів</a></li>
                 </ul>
                 </li>
 
@@ -95,7 +95,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" style="color: #912D9B;" href="{% url 'get_my_orders' %}">Історія замовлень</a>
+                    <a class="nav-link" style="color: #912D9B;"
+                       href="{% url 'get_orders_history' request.user.pk %}">Історія замовлень</a>
                 </li>
                 {% endif %}
 

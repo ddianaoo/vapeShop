@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Список користувачів :: {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<h2 class="text-center mb-4 mt-5">Список користувачів</h2>
+<br>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Електронна пошта</th>
+            <th scope="col">Ім'я</th>
+            <th scope="col">Прізвище</th>
+            <th scope="col">Вік</th>
+            <th scope="col">Номер телефону</th>
+            <th scope="col">Адреса</th>
+            <th scope="col">Персонал</th>
+            <th scope="col">Суперкористувач</th>
+            <th scope="col">Активний</th>
+            <th scope="col">Історія замовлень</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <th scope="row">{{ user.id }}</th>
+            <td>{{ user.email }}</td>
+            <td>{{ user.firstname }}</td>
+            <td>{{ user.lastname }}</td>
+            <td>{{ user.age }}</td>
+            <td>{{ user.phone }}</td>
+            <td>{{ user.address }}</td>
+            <td>{% if user.is_staff %}Так{% else %}Ні{% endif %}</td>
+            <td>{% if user.is_superuser %}Так{% else %}Ні{% endif %}</td>
+            <td>{% if user.is_active %}Так{% else %}Ні{% endif %}</td>
+            <td>
+                {% if not user.is_staff %}
+                <a class="nav-link" style="color: #912D9B;"
+                       href="{% url 'get_orders_history' user.pk %}">Історія замовлень</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
