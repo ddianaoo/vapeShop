@@ -1,10 +1,11 @@
 from django import template
+from ..models import STATUS_CHOICES
 
 register = template.Library()
 
 @register.filter
-def display_status(status, choices):
-    return choices[int(status)][1] or 'Unknown'
+def display_status(status):
+    return STATUS_CHOICES[int(status)][1] or 'Unknown'
 
 @register.filter
 def calculate_order_total(order_details):

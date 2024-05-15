@@ -16,7 +16,7 @@
     {% for order, order_details in order_pars.items %}
     <div class="card mb-4">
         <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #912D9B;">
-            <div>Статус: {{ order.status|display_status:STATUS_CHOICES }}</div>
+            <div>Статус: {{ order.status|display_status }}</div>
             <div>Замовлено: {{ order.created_at|date:"d.m.Y" }}</div>
         </div>
 

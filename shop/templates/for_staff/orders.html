@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load order_labels %}
+
+{% block title %}
+Список замовлень :: {{ block.super }}
+{% endblock %}
+
+{% block sidebar %}
+    {% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+
+{% block content %}
+<h2 class="text-center mb-4 mt-5">Список замовлень({{orders.count}})</h2>
+
+<div class="d-flex justify-content-center">
+    <form action="{% url 'order_list' %}" method="get" class="col-md-2 d-flex">
+        <div class="mb-3">
+            <select class="form-select" id="filterSelect" name="filter">
+                {% for filter in STATUS_FILTERS %}
+                    <option value="{{ filter.1 }}"
+                            {% if request.GET.filter == filter.1 %}selected{% endif %}>
+                        {{ filter.0 }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="ml-auto">
+            <button class="btn btn-outline-secondary" type="submit" style="height: 38px">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<table class="table" style="margin: 0 30px;">
+    <thead>
+        <tr>
+            <th scope="col">Order ID</th>
+            <th scope="col">Користувач</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Дата створення</th>
+            <th scope="col">Деталі</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <th scope="row">{{ order.id }}</th>
+            <td>
+                <h6>{{ order.user }}</h6>
+                <p>Тел.: {{ order.user.phone }}</p>
+                <p>Адреса: {{ order.user.address }}</p>
+            </td>
+                        <td>
+                <form action="{% url 'change_order_status' order.id %}" method="post">
+                {% csrf_token %}
+
+                <div class="d-flex align-items-center">
+                    <select class="form-control mr-2" name="status">
+                        {% for choice in STATUS_CHOICES %}
+                            <option value="{{ choice.0 }}" {% if choice.0 == order.status %}selected{% endif %}>
+                                {{ choice.1 }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn-success" type="submit">
+                        <i class="fas fa-check"></i>
+                    </button>
+                </div>
+                </form>
+            </td>
+            <td>{{ order.created_at }}</td>
+            <td>
+                <ul>
+                    {% for detail in order.orderdetail_set.all %}
+
+                    <li>
+                        <a href="{{ detail.product.get_absolute_url }}" class="text-decoration-none text-dark">
+                        {{ detail.product.title }}
+                        </a>
+                        - {{ detail.quantity }} шт
+                    </li>
+                    {% endfor %}
+                </ul>
+            </td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

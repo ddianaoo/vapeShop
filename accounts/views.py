@@ -56,7 +56,7 @@ def signout(request):
 @method_decorator(staff_login_required, name='dispatch')
 class ListUsers(ListView):
     context_object_name = 'users'
-    paginate_by = 6
+    paginate_by = 10
     model = CustomUser
     template_name = 'accounts/user_list.html'
 

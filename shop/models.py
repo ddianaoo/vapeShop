@@ -8,6 +8,7 @@ STATUS_CHOICES = (
     (1, 'В обробці'),
     (2, 'Відправлено'),
     (3, 'Доставлено'),
+    (4, 'Скасовано')
 )
 
 
@@ -51,7 +52,7 @@ class Product(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateField(auto_now_add=True, verbose_name='Дата створення')
-    status = models.CharField(null=False, choices=STATUS_CHOICES, default=0)
+    status = models.IntegerField(null=False, choices=STATUS_CHOICES, default=0)
 
     class Meta:
         verbose_name = 'замовлення'

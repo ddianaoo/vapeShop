@@ -6,6 +6,14 @@ from vapeshop.decorators import custom_login_required, staff_login_required
 from .forms import CreateCategoryForm, CreateProductForm, EditProductForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from datetime import datetime, timedelta
+
+
+STATUS_FILTERS = (
+    ('Всі', 'all'),
+    ('За останній місяць', 'last_month'),
+    ('За останні три місяці', 'last_3_months')
+)
 
 
 class ListProducts(ListView):
@@ -80,7 +88,7 @@ def create_order(request, order_id):
     order.status = 1
     order.save()
     messages.success(request, 'Ви успішно оформили замовлення!')
-    return redirect('home')
+    return redirect('get_orders_history', request.user.pk)
 
 
 @login_required
@@ -91,7 +99,7 @@ def get_orders_history(request, user_pk):
         for order in orders:
             order_details = OrderDetail.objects.filter(order=order)
             order_pars[order] = order_details
-        return render(request, "orders/orders_history.html", {'order_pars': order_pars, 'STATUS_CHOICES': STATUS_CHOICES })
+        return render(request, "orders/orders_history.html", {'order_pars': order_pars})
     else:
         messages.error(request, 'Ви не маєте такого права')
         return redirect('home')
@@ -181,4 +189,39 @@ def edit_product(request, pk):
     return render(request, 'for_staff/edit_item.html',
                   {'form': form, 'title': 'Редагування товару'})
 
+
+@staff_login_required
+def get_list_orders(request):
+    queryset = Order.objects.all().order_by('status')
+
+    filter_option = request.GET.get('filter')
+    if filter_option == 'last_month':
+        start_date = datetime.now() - timedelta(days=30)
+        queryset = queryset.filter(created_at__gte=start_date)
+    elif filter_option == 'last_3_months':
+        start_date = datetime.now() - timedelta(days=90)
+        queryset = queryset.filter(created_at__gte=start_date)
+
+    return render(request, 'for_staff/orders.html',
+                  {'orders': queryset,
+                   'STATUS_CHOICES': STATUS_CHOICES[1:],
+                   'STATUS_FILTERS': STATUS_FILTERS})
+
+
+@staff_login_required
+def change_order_status(request, order_id):
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        try:
+            order = Order.objects.get(pk=order_id)
+            if int(order.status) == 1 and int(new_status) > 1:
+                for detail in order.orderdetail_set.all():
+                    detail.product.stock_quantity -= detail.quantity
+                    detail.product.save()
+            order.status = new_status
+            order.save()
+            messages.success(request, 'Статус замовлення успішно змінено.')
+        except Order.DoesNotExist:
+            messages.error(request, 'Замовлення не знайдено.')
+    return redirect('order_list')
 

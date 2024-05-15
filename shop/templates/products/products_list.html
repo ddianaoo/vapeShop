@@ -6,7 +6,7 @@
 
 {% block content %}
 <br/>
-<div class="row">
+<div class="row" style="margin: 0 10px;">
 
     {% if products %}
 
@@ -22,7 +22,7 @@
         {% endif %}
 
         <div class="card-body">
-          <h5 class="card-title">{{ item.title }}</h5>
+          <h6 class="card-title">{{ item.title|truncatechars:30 }}</h6>
             <hr>
             <h6 class="card-text">{{ item.price }} грн</h6>
 
