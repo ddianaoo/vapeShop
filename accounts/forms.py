@@ -36,3 +36,17 @@ class UserLoginForm(forms.ModelForm):
 
     def get_user(self):
         return self.user_cache
+
+
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ('email', 'firstname', 'lastname', 'age', 'phone', 'address')
+        widgets = {
+            'firstname': forms.TextInput(attrs={'class': 'form-control'}),
+            'lastname': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+38 *** *** ** **'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+            'age': forms.NumberInput(attrs={'class': 'form-control', 'step': '1'}),
+        }

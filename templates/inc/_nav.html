@@ -109,10 +109,27 @@
 
 
         {% if request.user.is_authenticated %}
-        <span class="navbar-text" style="color:black;">
-            Ласкаво просимо, {{ request.user.firstname }} !
+        <span class="navbar-text">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown7" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false" style="color: #912D9B;">
+                    <i class="bi bi-person-circle"></i>  Профіль
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{% url 'edit_user' %}">Редагувати профіль</a></li>
+                    <li><a class="dropdown-item" href="{% url 'delete_user' request.user.pk %}" >Видалити профіль</a></li>
+                </ul>
+                </li>
+
+
+
+
+        <li class="nav-item">
             <a href="{% url 'signout' %}" style="color:white; background-color: black; border: black;" class="btn btn-primary">Вихід</a>
-            </span>
+        </li>
+        </ul>
+
         {% else %}
         <span class="navbar-text">
             <a href="{% url 'signin' %}" style="color:white; background-color: black; border: black;" class="btn btn-primary">Вхід</a>

@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from .forms import UserLoginForm, UserRegisterForm
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import UserLoginForm, UserRegisterForm, UserEditForm
 from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.views.generic import View, ListView, DetailView
@@ -76,3 +76,25 @@ def add_assistant(request):
         form = UserRegisterForm()
     return render(request, 'accounts/signup.html',
                   {'form': form, 'title': 'Додати помічника'})
+
+
+@custom_login_required
+def edit_user(request):
+    user = get_object_or_404(CustomUser, pk=request.user.pk)
+    if request.method == 'POST':
+        form = UserEditForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Ваші дані успішно відредаговано!')
+            return redirect('home')
+    else:
+        form = UserEditForm(instance=user)
+    return render(request, 'for_staff/edit_item.html',
+                  {'form': form, 'title': 'Редагування профілю'})
+
+
+@custom_login_required
+def delete_user(request, pk):
+    user = get_object_or_404(CustomUser, pk=pk)
+    user.delete()
+    return redirect('signout')

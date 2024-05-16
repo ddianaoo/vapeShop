@@ -4,7 +4,6 @@ from django.views.generic import View, ListView, DetailView
 from django.contrib import messages
 from vapeshop.decorators import custom_login_required, staff_login_required
 from .forms import CreateCategoryForm, CreateProductForm, EditProductForm
-from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from datetime import datetime, timedelta
 
@@ -91,7 +90,7 @@ def create_order(request, order_id):
     return redirect('get_orders_history', request.user.pk)
 
 
-@login_required
+@custom_login_required
 def get_orders_history(request, user_pk):
     if request.user.pk == user_pk or request.user.is_staff:
         orders = Order.objects.filter(user__pk=user_pk).exclude(status=0)
