@@ -58,7 +58,9 @@
         {% endfor %}
       </tbody>
     </table>
-    <a href="{% url 'create_order' order.id %}" style="color:white; background-color: black; border: black;" class="btn btn-primary">Оформити</a>
+    <a href="{% url 'create_order' order.id %}" style="color:white; background-color: black; border: black;" class="btn btn-primary">
+      Перейти до оформлення
+    </a>
   </form>
 
   {% else %}

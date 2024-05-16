@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category, Order, OrderDetail, STATUS_CHOICES
-from django.views.generic import View, ListView, DetailView
+from django.views.generic import ListView, DetailView
 from django.contrib import messages
 from vapeshop.decorators import custom_login_required, staff_login_required
 from .forms import CreateCategoryForm, CreateProductForm, EditProductForm
@@ -39,10 +39,14 @@ class GetProducts(DetailView):
 @custom_login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    order, created = Order.objects.get_or_create(user=request.user, status=0)
-    order_detail, created = OrderDetail.objects.get_or_create(order=order, product=product)
-    messages.success(request, 'Товар додано до кошику!')
-    return redirect("cart")
+    if product.stock_quantity > 0:
+        order, created = Order.objects.get_or_create(user=request.user, status=0)
+        order_detail, created = OrderDetail.objects.get_or_create(order=order, product=product)
+        messages.success(request, 'Товар додано до кошику!')
+        return redirect("cart")
+    messages.error(request, 'Нажаль цього товару нема у наявності')
+    return redirect("home")
+
 
 
 @custom_login_required
@@ -83,11 +87,14 @@ def delete_item(request, item_id):
 
 @custom_login_required
 def create_order(request, order_id):
-    order = get_object_or_404(Order, id=order_id)
-    order.status = 1
-    order.save()
-    messages.success(request, 'Ви успішно оформили замовлення!')
-    return redirect('get_orders_history', request.user.pk)
+    if request.user.address and request.user.phone:
+        order = get_object_or_404(Order, id=order_id)
+        order.status = 1
+        order.save()
+        messages.success(request, 'Ви успішно оформили замовлення!')
+        return redirect('get_orders_history', request.user.pk)
+    messages.error(request, 'Заповніть дані для відправки!')
+    return redirect('edit_user')
 
 
 @custom_login_required

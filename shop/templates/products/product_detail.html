@@ -44,8 +44,15 @@
                       </svg>
                     </a>
                     {% else %}
-                    <a href="{% url 'add_to_cart' product.id %}" style="color:white; background-color: black; border: black; margin: 10px 15px"
-                       class="btn btn-primary">Додати в кошик</a>
+                    <a href="{% url 'add_to_cart' product.id %}"
+                       class="btn btn-primary {% if product.stock_quantity == 0 %}disabled{% endif %}"
+                       style="color:white; background-color: black; border: black; margin: 10px 15px"
+                       >
+                       Додати в кошик
+                    </a>
+                    {% if product.stock_quantity == 0 %}
+                    <p style="color: red;">Товару нема у наявності</p>
+                    {% endif %}
                     {% endif %}
                 </div>
             </div>
