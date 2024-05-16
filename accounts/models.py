@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator
+from vapeshop.validation import validate_phone_length
 
 
 class CustomUserManager(BaseUserManager):
@@ -32,8 +34,8 @@ class CustomUser(AbstractUser):
     firstname = models.CharField(max_length=50, blank=True, verbose_name="Ім'я")
     lastname = models.CharField(max_length=50, blank=True, verbose_name='Прізвище')
     password = models.CharField(max_length=255, verbose_name='Пароль')
-    age = models.IntegerField(null=False, default=18, verbose_name='Вік')
-    phone = models.CharField(max_length=13, blank=True, verbose_name='Номер телефону')
+    age = models.IntegerField(null=False, default=18, validators=[MinValueValidator(18)], verbose_name='Вік')
+    phone = models.CharField(max_length=13, validators=[validate_phone_length], blank=True, verbose_name='Номер телефону')
     address = models.CharField(max_length=255, blank=True, verbose_name='Адреса')
 
     is_staff = models.BooleanField(default=False, verbose_name='Персонал')

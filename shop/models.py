@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import CustomUser
 from django.urls import reverse
+from django.core.validators import MinValueValidator
 
 
 STATUS_CHOICES = (
@@ -34,8 +35,8 @@ class Product(models.Model):
     image = models.ImageField(upload_to='photos/%Y/%m/%d/', verbose_name='Фото', blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категорія')
     production = models.CharField(max_length=100, null=False, verbose_name='Виробник')
-    price = models.IntegerField(null=False, verbose_name='Ціна')
-    stock_quantity = models.IntegerField(null=False, verbose_name='Кількість у наявності')
+    price = models.IntegerField(null=False, validators=[MinValueValidator(1)], verbose_name='Ціна')
+    stock_quantity = models.IntegerField(null=False, validators=[MinValueValidator(0)], verbose_name='Кількість у наявності')
 
     class Meta:
         verbose_name = 'товар'
@@ -63,4 +64,4 @@ class Order(models.Model):
 class OrderDetail(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
+    quantity = models.IntegerField(default=1, validators=[MinValueValidator(1)])

@@ -101,14 +101,9 @@ def create_order(request, order_id):
 def get_orders_history(request, user_pk):
     if request.user.pk == user_pk or request.user.is_staff:
         orders = Order.objects.filter(user__pk=user_pk).exclude(status=0)
-        order_pars = dict()
-        for order in orders:
-            order_details = OrderDetail.objects.filter(order=order)
-            order_pars[order] = order_details
-        return render(request, "orders/orders_history.html", {'order_pars': order_pars})
-    else:
-        messages.error(request, 'Ви не маєте такого права')
-        return redirect('home')
+        return render(request, "orders/orders_history.html", {'orders': orders})
+    messages.error(request, 'Ви не маєте такого права')
+    return redirect('home')
 
 
 #for staff

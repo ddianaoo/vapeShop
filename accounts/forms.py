@@ -1,7 +1,7 @@
 from django import forms
 from .models import CustomUser
-from .signin import EmailAuthBackend
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate
 
 
 class UserRegisterForm(UserCreationForm):
@@ -21,18 +21,23 @@ class UserRegisterForm(UserCreationForm):
 
 
 class UserLoginForm(forms.ModelForm):
-    email = forms.EmailField(label='Електронна поштa', widget=forms.EmailInput(attrs={'class': 'form-control'}))
-    password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
     class Meta:
-        model = CustomUser
         fields = ['email', 'password']
+        model = CustomUser
+        widgets = {
+            'password': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
 
     def clean(self):
-        if self.is_valid():
-            email = self.cleaned_data.get('email')
-            password = self.cleaned_data.get('password')
-            self.user_cache = EmailAuthBackend().authenticate(email=email, password=password)
+        email = self.cleaned_data.get('email')
+        password = self.cleaned_data.get('password')
+        if email is not None and password:
+            self.user_cache = authenticate(email=email, password=password)
+            if self.user_cache is None:
+                raise forms.ValidationError("Неправильний email або пароль.")
+        return self.cleaned_data
 
     def get_user(self):
         return self.user_cache

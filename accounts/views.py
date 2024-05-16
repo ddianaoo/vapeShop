@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserLoginForm, UserRegisterForm, UserEditForm
 from django.contrib.auth import login, logout
 from django.contrib import messages
-from django.views.generic import View, ListView, DetailView
+from django.views.generic import ListView
 from .models import CustomUser
 from vapeshop.decorators import custom_login_required, staff_login_required
 from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 
 def signup(request):
@@ -37,12 +38,6 @@ def signin(request):
             login(request, user)
             messages.success(request, 'Ви увійшли')
             return redirect('home')
-        else:
-            error = {}
-            for field in form.errors:
-                error[field] = form.errors[field].as_text()
-            messages.error(request, *[e[1:] for e in error.values()])
-            form = UserLoginForm()
     else:
         form = UserLoginForm()
     return render(request, 'accounts/login.html', {'form': form})
@@ -78,7 +73,7 @@ def add_assistant(request):
                   {'form': form, 'title': 'Додати помічника'})
 
 
-@custom_login_required
+@login_required
 def edit_user(request):
     user = get_object_or_404(CustomUser, pk=request.user.pk)
     if request.method == 'POST':
